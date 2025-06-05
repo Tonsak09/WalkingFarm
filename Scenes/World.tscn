@@ -1,0 +1,38 @@
+[gd_scene load_steps=6 format=3 uid="uid://bx8amdklt1ww"]
+
+[ext_resource type="Script" path="res://Scripts/CameraLock.gd" id="1_s4rmy"]
+[ext_resource type="Script" path="res://Scenes/SphereController.gd" id="2_spmin"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_rksr7"]
+rings = 120
+
+[sub_resource type="QuadMesh" id="QuadMesh_51cjp"]
+
+[sub_resource type="Environment" id="Environment_liblb"]
+
+[node name="World" type="Node3D"]
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.983255, 0.182236, 0, -0.182236, 0.983255, 2.03, 26.994, 6.877)
+
+[node name="Planet" type="MeshInstance3D" parent="."]
+transform = Transform3D(50, 0, 0, 0, 50, 0, 0, 0, 50, 0, 0, 0)
+mesh = SubResource("SphereMesh_rksr7")
+
+[node name="Controller" type="Node3D" parent="."]
+script = ExtResource("2_spmin")
+radius = 25.0
+speed = 0.3
+
+[node name="Character" type="MeshInstance3D" parent="Controller" node_paths=PackedStringArray("cam")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25.5, 0)
+mesh = SubResource("QuadMesh_51cjp")
+skeleton = NodePath("../..")
+script = ExtResource("1_s4rmy")
+cam = NodePath("../../Camera3D")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_liblb")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.875566, 0.483099, 0, -0.483099, 0.875566, 0, 0, 0)
