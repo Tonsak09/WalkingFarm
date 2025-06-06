@@ -19,9 +19,6 @@ rings = 120
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.983255, 0.182236, 0, -0.182236, 0.983255, 2.03, 26.994, 6.877)
 
-[node name="CamTarget" type="Node3D" parent="Camera3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.71334, 9.24434)
-
 [node name="Planet" type="MeshInstance3D" parent="."]
 mesh = SubResource("SphereMesh_rksr7")
 
@@ -29,14 +26,11 @@ mesh = SubResource("SphereMesh_rksr7")
 
 [node name="Placeholder" parent="Planet/PlanetRoot" instance=ExtResource("4_8n6ek")]
 
-[node name="Spawner" type="Node3D" parent="Planet" node_paths=PackedStringArray("cam", "root")]
+[node name="Spawner" type="Node3D" parent="Planet" node_paths=PackedStringArray("root")]
 transform = Transform3D(0.02, 0, 0, 0, 0.02, 0, 0, 0, 0.02, 0, 0, 0)
 script = ExtResource("1_cll8s")
-cam = NodePath("../../Camera3D/CamTarget")
 root = NodePath("../PlanetRoot")
 tree = ExtResource("4_8n6ek")
-xRotRange = Vector2(-0.5, -0.5)
-zRotRange = Vector2(-0.1, 0.5)
 
 [node name="SpawnTimer" type="Timer" parent="Planet/Spawner"]
 autostart = true
@@ -45,8 +39,6 @@ autostart = true
 script = ExtResource("2_spmin")
 radius = 25.0
 speed = 0.3
-pitchRange = Vector2(-0.3, 0.1)
-rollRange = Vector2(-0.2, 0.15)
 
 [node name="Character" type="MeshInstance3D" parent="Controller" node_paths=PackedStringArray("cam")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25.5, 0)
@@ -54,7 +46,6 @@ mesh = SubResource("QuadMesh_51cjp")
 skeleton = NodePath("../..")
 script = ExtResource("1_s4rmy")
 cam = NodePath("../../Camera3D")
-initiated = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_liblb")

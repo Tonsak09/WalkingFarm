@@ -3,6 +3,9 @@ extends Node3D
 @export var radius : float
 @export var speed : float 
 
+@export var pitchRange : Vector2
+@export var rollRange  : Vector2
+
 var pitch : float
 var roll : float
 
@@ -23,6 +26,9 @@ func _process(delta: float) -> void:
 		pitch += speed * delta
 	elif Input.is_action_pressed("Right"):
 		pitch -= speed * delta
+	
+	pitch = clampf(pitch, pitchRange.x, pitchRange.y)
+	roll = clampf(roll, rollRange.x, rollRange.y)
 	
 	transform.basis = Basis() # reset rotation
 	rotate_object_local(Vector3(0, 0, 1), pitch) # first rotate in Y

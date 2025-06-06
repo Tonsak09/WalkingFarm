@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://d2nh0h36i5snk"]
+
+[ext_resource type="Script" path="res://Scripts/PlanetRoot.gd" id="1_2nahv"]
+[ext_resource type="Script" path="res://Scripts/CameraLock.gd" id="1_fr7xr"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_51cjp"]
+
+[node name="Placeholder" type="Node3D"]
+script = ExtResource("1_2nahv")
+speed = 0.1
+
+[node name="Character" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25.5, 0)
+mesh = SubResource("QuadMesh_51cjp")
+script = ExtResource("1_fr7xr")
