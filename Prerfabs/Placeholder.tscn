@@ -1,15 +1,44 @@
-[gd_scene load_steps=4 format=3 uid="uid://d2nh0h36i5snk"]
+[gd_scene load_steps=8 format=3 uid="uid://d2nh0h36i5snk"]
 
 [ext_resource type="Script" path="res://Scripts/PlanetRoot.gd" id="1_2nahv"]
 [ext_resource type="Script" path="res://Scripts/CameraLock.gd" id="1_fr7xr"]
+[ext_resource type="Shader" path="res://Shaders/Character.gdshader" id="2_mcvau"]
+[ext_resource type="Script" path="res://Scripts/KillEntity.gd" id="4_fobxd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ykqvl"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("2_mcvau")
+shader_parameter/breakLerp = -0.065
+shader_parameter/cellCount = 32.0
+shader_parameter/breaks = PackedInt32Array(0, 8, 4, 2, 1)
 
 [sub_resource type="QuadMesh" id="QuadMesh_51cjp"]
 
+[sub_resource type="Curve" id="Curve_q8eno"]
+_data = [Vector2(0, 0), 0.0, 1.4, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
 [node name="Placeholder" type="Node3D"]
 script = ExtResource("1_2nahv")
-speed = 0.1
+speed = 0.2
 
 [node name="Character" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00367999, 25.5, 0.000477672)
+material_override = SubResource("ShaderMaterial_ykqvl")
 mesh = SubResource("QuadMesh_51cjp")
 script = ExtResource("1_fr7xr")
+
+[node name="Kill" type="Node" parent="." node_paths=PackedStringArray("timer", "mesh", "character")]
+script = ExtResource("4_fobxd")
+timer = NodePath("Timer")
+mesh = NodePath("../Character")
+character = NodePath("../Character")
+curve = SubResource("Curve_q8eno")
+killDis = 200.0
+
+[node name="Timer" type="Timer" parent="Kill"]
+wait_time = 0.3
+one_shot = true
+
+[connection signal="timeout" from="Kill/Timer" to="Kill" method="Cleanup"]
