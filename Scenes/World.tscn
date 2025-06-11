@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://bx8amdklt1ww"]
+[gd_scene load_steps=26 format=3 uid="uid://bx8amdklt1ww"]
 
 [ext_resource type="Script" path="res://Scripts/Spawner.gd" id="1_cll8s"]
 [ext_resource type="Script" path="res://Scripts/CameraLock.gd" id="1_s4rmy"]
@@ -12,10 +12,11 @@
 [ext_resource type="Texture2D" uid="uid://b1h5mstnpd4ba" path="res://Textures/Log Book/LogBook_Plants-Left.PNG" id="10_w1dx8"]
 [ext_resource type="Texture2D" uid="uid://ds7b5hyg7ssnu" path="res://Textures/Log Book/LogBook_Tasks-Left.PNG" id="11_lqgvb"]
 [ext_resource type="Texture2D" uid="uid://ckpxxwuyd5sja" path="res://Textures/Log Book/LogBook_Friends-Right.PNG" id="12_l0qih"]
+[ext_resource type="Script" path="res://Scripts/Tab.gd" id="13_bev6f"]
 [ext_resource type="Texture2D" uid="uid://dylmh6qrar72k" path="res://Textures/Log Book/LogBook_Plants-Right.PNG" id="13_u5xah"]
 [ext_resource type="Texture2D" uid="uid://c00foh7iiveyj" path="res://Textures/Log Book/LogBook_Tasks-Right.PNG" id="14_ywc8u"]
-[ext_resource type="Texture2D" uid="uid://bhiblnlo3qnad" path="res://Textures/Log Book/Arrow-Left.PNG" id="15_kbd8b"]
-[ext_resource type="Texture2D" uid="uid://d2bl6bd2h7mwh" path="res://Textures/Log Book/Arrow-Right.PNG" id="16_vphyd"]
+[ext_resource type="Texture2D" uid="uid://bnpin7lfwgqct" path="res://Textures/Log Book/Next.PNG" id="15_ya2hs"]
+[ext_resource type="Texture2D" uid="uid://dg3xeuomdplxg" path="res://Textures/Log Book/Last.PNG" id="16_kivdd"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_rksr7"]
 radius = 25.0
@@ -143,67 +144,94 @@ offset_bottom = 1080.0
 texture = ExtResource("8_3xcqb")
 
 [node name="FriendsLeft" type="TextureRect" parent="LogBook"]
+layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
 texture = ExtResource("9_avoot")
 
 [node name="PlantsLeft" type="TextureRect" parent="LogBook"]
+layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
 texture = ExtResource("10_w1dx8")
 
 [node name="TasksLeft" type="TextureRect" parent="LogBook"]
+layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
 texture = ExtResource("11_lqgvb")
 
 [node name="FriendsRight" type="TextureRect" parent="LogBook"]
+layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
 texture = ExtResource("12_l0qih")
+script = ExtResource("13_bev6f")
+tabOnHover = ExtResource("13_u5xah")
+tabOffHover = ExtResource("12_l0qih")
 
 [node name="Button3" type="Button" parent="LogBook/FriendsRight"]
+layout_mode = 0
 offset_left = 1725.0
 offset_top = 504.0
 offset_right = 1855.0
 offset_bottom = 614.0
 
 [node name="PlantsRight" type="TextureRect" parent="LogBook"]
+layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
 texture = ExtResource("13_u5xah")
 
 [node name="Button2" type="Button" parent="LogBook/PlantsRight"]
+layout_mode = 0
 offset_left = 1725.0
 offset_top = 327.0
 offset_right = 1855.0
 offset_bottom = 437.0
 
 [node name="TasksRight" type="TextureRect" parent="LogBook"]
+layout_mode = 0
 offset_right = 1920.0
 offset_bottom = 1080.0
 texture = ExtResource("14_ywc8u")
 
 [node name="Button" type="Button" parent="LogBook/TasksRight"]
+layout_mode = 0
 offset_left = 1725.0
 offset_top = 163.0
 offset_right = 1855.0
 offset_bottom = 273.0
 
-[node name="TextureRect" type="TextureRect" parent="LogBook"]
+[node name="Next" type="TextureRect" parent="LogBook"]
 layout_mode = 0
-offset_left = -27.0
-offset_top = 633.0
-offset_right = 151.0
-offset_bottom = 811.0
-texture = ExtResource("15_kbd8b")
+offset_left = 3.0
+offset_top = -7.0
+offset_right = 1923.0
+offset_bottom = 1073.0
+texture = ExtResource("15_ya2hs")
 
-[node name="TextureRect2" type="TextureRect" parent="LogBook"]
-offset_left = 1752.0
-offset_top = 653.0
-offset_right = 1930.0
-offset_bottom = 831.0
-texture = ExtResource("16_vphyd")
+[node name="Button" type="Button" parent="LogBook/Next"]
+layout_mode = 0
+offset_left = 1437.0
+offset_top = 906.0
+offset_right = 1656.0
+offset_bottom = 979.0
+
+[node name="Last" type="TextureRect" parent="LogBook"]
+layout_mode = 0
+offset_left = 1.0
+offset_top = -4.0
+offset_right = 1921.0
+offset_bottom = 1076.0
+texture = ExtResource("16_kivdd")
+
+[node name="Button" type="Button" parent="LogBook/Last"]
+offset_left = 251.0
+offset_top = 907.0
+offset_right = 470.0
+offset_bottom = 980.0
 
 [connection signal="timeout" from="Planet/PlanetRoot/Placeholder2/Kill/Timer" to="Planet/PlanetRoot/Placeholder2/Kill" method="Cleanup"]
 [connection signal="timeout" from="Planet/Spawner/SpawnTimer" to="Planet/Spawner" method="SpawnEntity"]
+[connection signal="pressed" from="LogBook/FriendsRight/Button3" to="LogBook/FriendsRight" method="swapHover"]
