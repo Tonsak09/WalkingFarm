@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://bx8amdklt1ww"]
+[gd_scene load_steps=30 format=3 uid="uid://bx8amdklt1ww"]
 
 [ext_resource type="Script" path="res://Scripts/Spawner.gd" id="1_cll8s"]
 [ext_resource type="Script" path="res://Scripts/CameraLock.gd" id="1_s4rmy"]
@@ -6,7 +6,10 @@
 [ext_resource type="Script" path="res://Scripts/SphereController.gd" id="2_spmin"]
 [ext_resource type="Shader" path="res://Shaders/Character.gdshader" id="3_40pe7"]
 [ext_resource type="PackedScene" uid="uid://d2nh0h36i5snk" path="res://Prerfabs/Placeholder.tscn" id="4_8n6ek"]
+[ext_resource type="Script" path="res://Scripts/Interactable.gd" id="5_crgjx"]
 [ext_resource type="Script" path="res://Scripts/KillEntity.gd" id="5_en4ie"]
+[ext_resource type="Texture2D" uid="uid://bvjmaw7i360va" path="res://Textures/Border16_9.png" id="6_6y3p4"]
+[ext_resource type="Script" path="res://Scripts/Dialogue.gd" id="7_2rewo"]
 [ext_resource type="Texture2D" uid="uid://bsgy8swgdb7od" path="res://Textures/Log Book/LogBook.PNG" id="8_3xcqb"]
 [ext_resource type="Texture2D" uid="uid://bren3ih6nhc5x" path="res://Textures/Log Book/LogBook_Friends-Left.PNG" id="9_avoot"]
 [ext_resource type="Texture2D" uid="uid://b1h5mstnpd4ba" path="res://Textures/Log Book/LogBook_Plants-Left.PNG" id="10_w1dx8"]
@@ -32,6 +35,9 @@ shader_parameter/cellCount = 32.0
 shader_parameter/breaks = PackedInt32Array(0, 8, 4, 2, 1)
 
 [sub_resource type="QuadMesh" id="QuadMesh_51cjp"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ugpis"]
+radius = 1.586
 
 [sub_resource type="Curve" id="Curve_q8eno"]
 _data = [Vector2(0, 0), 0.0, 1.4, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -71,6 +77,29 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00367999, 25.5, 0.00047767
 material_override = SubResource("ShaderMaterial_63nrd")
 mesh = SubResource("QuadMesh_51cjp")
 script = ExtResource("1_s4rmy")
+
+[node name="Interaction" type="Area3D" parent="Planet/PlanetRoot/Placeholder2/Character" node_paths=PackedStringArray("interactbale")]
+transform = Transform3D(1, 2.98023e-08, 0, -2.98023e-08, 1, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("5_crgjx")
+interactbale = NodePath("Dialogue")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Planet/PlanetRoot/Placeholder2/Character/Interaction"]
+shape = SubResource("SphereShape3D_ugpis")
+
+[node name="Dialogue" type="Sprite3D" parent="Planet/PlanetRoot/Placeholder2/Character/Interaction" node_paths=PackedStringArray("label", "timer")]
+transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 1.09, 0)
+texture = ExtResource("6_6y3p4")
+script = ExtResource("7_2rewo")
+label = NodePath("Label3D")
+timer = NodePath("Timer")
+text = "This is a test "
+
+[node name="Label3D" type="Label3D" parent="Planet/PlanetRoot/Placeholder2/Character/Interaction/Dialogue"]
+text = "This is a test"
+font_size = 400
+
+[node name="Timer" type="Timer" parent="Planet/PlanetRoot/Placeholder2/Character/Interaction/Dialogue"]
+wait_time = 0.01
 
 [node name="Kill" type="Node" parent="Planet/PlanetRoot/Placeholder2" node_paths=PackedStringArray("timer", "mesh", "character")]
 script = ExtResource("5_en4ie")
@@ -130,6 +159,7 @@ transform = Transform3D(2.86891, 0, -0.877115, 0, 3, 0, 0.877115, 0, 2.86891, -3
 mesh = SubResource("BoxMesh_st1bh")
 
 [node name="LogBook" type="Control" parent="."]
+visible = false
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -227,11 +257,15 @@ offset_bottom = 1076.0
 texture = ExtResource("16_kivdd")
 
 [node name="Button" type="Button" parent="LogBook/Last"]
+layout_mode = 0
 offset_left = 251.0
 offset_top = 907.0
 offset_right = 470.0
 offset_bottom = 980.0
 
+[connection signal="area_entered" from="Planet/PlanetRoot/Placeholder2/Character/Interaction" to="Planet/PlanetRoot/Placeholder2/Character/Interaction" method="Initiate"]
+[connection signal="area_exited" from="Planet/PlanetRoot/Placeholder2/Character/Interaction" to="Planet/PlanetRoot/Placeholder2/Character/Interaction" method="Leave"]
+[connection signal="timeout" from="Planet/PlanetRoot/Placeholder2/Character/Interaction/Dialogue/Timer" to="Planet/PlanetRoot/Placeholder2/Character/Interaction/Dialogue" method="NextChar"]
 [connection signal="timeout" from="Planet/PlanetRoot/Placeholder2/Kill/Timer" to="Planet/PlanetRoot/Placeholder2/Kill" method="Cleanup"]
 [connection signal="timeout" from="Planet/Spawner/SpawnTimer" to="Planet/Spawner" method="SpawnEntity"]
 [connection signal="pressed" from="LogBook/FriendsRight/Button3" to="LogBook/FriendsRight" method="swapHover"]
