@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://bx8amdklt1ww"]
+[gd_scene load_steps=30 format=3 uid="uid://bx8amdklt1ww"]
 
 [ext_resource type="Script" path="res://Scripts/Spawner.gd" id="1_cll8s"]
 [ext_resource type="Script" path="res://Scripts/CameraLock.gd" id="1_s4rmy"]
@@ -8,6 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://d2nh0h36i5snk" path="res://Prerfabs/Placeholder.tscn" id="4_8n6ek"]
 [ext_resource type="Script" path="res://Scripts/Interactable.gd" id="5_crgjx"]
 [ext_resource type="Script" path="res://Scripts/KillEntity.gd" id="5_en4ie"]
+[ext_resource type="Texture2D" uid="uid://bvjmaw7i360va" path="res://Textures/Border16_9.png" id="6_6y3p4"]
 [ext_resource type="Script" path="res://Scripts/Dialogue.gd" id="7_2rewo"]
 [ext_resource type="Texture2D" uid="uid://bsgy8swgdb7od" path="res://Textures/Log Book/LogBook.PNG" id="8_3xcqb"]
 [ext_resource type="Texture2D" uid="uid://bren3ih6nhc5x" path="res://Textures/Log Book/LogBook_Friends-Left.PNG" id="9_avoot"]
@@ -36,7 +37,7 @@ shader_parameter/breaks = PackedInt32Array(0, 8, 4, 2, 1)
 [sub_resource type="QuadMesh" id="QuadMesh_51cjp"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ugpis"]
-radius = 2.48729
+radius = 1.586
 
 [sub_resource type="Curve" id="Curve_q8eno"]
 _data = [Vector2(0, 0), 0.0, 1.4, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
@@ -87,6 +88,7 @@ shape = SubResource("SphereShape3D_ugpis")
 
 [node name="Dialogue" type="Sprite3D" parent="Planet/PlanetRoot/Placeholder2/Character/Interaction" node_paths=PackedStringArray("label", "timer")]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 1.09, 0)
+texture = ExtResource("6_6y3p4")
 script = ExtResource("7_2rewo")
 label = NodePath("Label3D")
 timer = NodePath("Timer")
