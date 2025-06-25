@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://bx8amdklt1ww"]
+[gd_scene load_steps=35 format=3 uid="uid://bx8amdklt1ww"]
 
 [ext_resource type="Script" path="res://Scripts/Spawner.gd" id="1_cll8s"]
 [ext_resource type="Script" path="res://Scripts/CameraLock.gd" id="1_s4rmy"]
@@ -10,9 +10,11 @@
 [ext_resource type="Script" path="res://Scripts/KillEntity.gd" id="5_en4ie"]
 [ext_resource type="Script" path="res://Scripts/Dialogue.gd" id="7_2rewo"]
 [ext_resource type="Texture2D" uid="uid://bsgy8swgdb7od" path="res://Textures/Log Book/LogBook.PNG" id="8_3xcqb"]
+[ext_resource type="Script" path="res://Scripts/PlantLogic.gd" id="8_eyrrm"]
 [ext_resource type="Texture2D" uid="uid://bren3ih6nhc5x" path="res://Textures/Log Book/LogBook_Friends-Left.PNG" id="9_avoot"]
 [ext_resource type="Texture2D" uid="uid://b1h5mstnpd4ba" path="res://Textures/Log Book/LogBook_Plants-Left.PNG" id="10_w1dx8"]
 [ext_resource type="Texture2D" uid="uid://ds7b5hyg7ssnu" path="res://Textures/Log Book/LogBook_Tasks-Left.PNG" id="11_lqgvb"]
+[ext_resource type="Texture2D" uid="uid://c0wksahyf0omi" path="res://Textures/farmJam_playerChar_V01.png" id="11_q1uqy"]
 [ext_resource type="Texture2D" uid="uid://ckpxxwuyd5sja" path="res://Textures/Log Book/LogBook_Friends-Right.PNG" id="12_l0qih"]
 [ext_resource type="Script" path="res://Scripts/Tab.gd" id="13_bev6f"]
 [ext_resource type="Texture2D" uid="uid://dylmh6qrar72k" path="res://Textures/Log Book/LogBook_Plants-Right.PNG" id="13_u5xah"]
@@ -42,6 +44,26 @@ radius = 2.48729
 _data = [Vector2(0, 0), 0.0, 1.4, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
 point_count = 2
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fnycg"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("3_40pe7")
+shader_parameter/breakLerp = -0.065
+shader_parameter/cellCount = 32.0
+shader_parameter/breaks = PackedInt32Array(0, 8, 4, 2, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_cfos3"]
+
+[sub_resource type="Curve" id="Curve_c6avi"]
+_data = [Vector2(0, 0), 0.0, 1.4, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qdvy4"]
+transparency = 2
+alpha_scissor_threshold = 0.5
+alpha_antialiasing_mode = 0
+albedo_texture = ExtResource("11_q1uqy")
+
 [sub_resource type="QuadMesh" id="QuadMesh_354vw"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_x4i3g"]
@@ -66,40 +88,41 @@ mesh = SubResource("SphereMesh_rksr7")
 [node name="PlanetRoot" type="Node3D" parent="Planet"]
 
 [node name="Placeholder" parent="Planet/PlanetRoot" instance=ExtResource("4_8n6ek")]
+visible = false
 
-[node name="Placeholder2" type="Node3D" parent="Planet/PlanetRoot"]
+[node name="NPC" type="Node3D" parent="Planet/PlanetRoot"]
 transform = Transform3D(0.989096, 0.147274, 0, -0.147274, 0.989096, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("2_fr53q")
 
-[node name="Character" type="MeshInstance3D" parent="Planet/PlanetRoot/Placeholder2"]
+[node name="Character" type="MeshInstance3D" parent="Planet/PlanetRoot/NPC"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00367999, 25.5, 0.000477672)
 material_override = SubResource("ShaderMaterial_63nrd")
 mesh = SubResource("QuadMesh_51cjp")
 script = ExtResource("1_s4rmy")
 
-[node name="Interaction" type="Area3D" parent="Planet/PlanetRoot/Placeholder2/Character" node_paths=PackedStringArray("interactbale")]
+[node name="Interaction" type="Area3D" parent="Planet/PlanetRoot/NPC/Character" node_paths=PackedStringArray("interactbale")]
 transform = Transform3D(1, 2.98023e-08, 0, -2.98023e-08, 1, 0, 0, 0, 1, 0, 0, 0)
 script = ExtResource("5_crgjx")
 interactbale = NodePath("Dialogue")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Planet/PlanetRoot/Placeholder2/Character/Interaction"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Planet/PlanetRoot/NPC/Character/Interaction"]
 shape = SubResource("SphereShape3D_ugpis")
 
-[node name="Dialogue" type="Sprite3D" parent="Planet/PlanetRoot/Placeholder2/Character/Interaction" node_paths=PackedStringArray("label", "timer")]
+[node name="Dialogue" type="Sprite3D" parent="Planet/PlanetRoot/NPC/Character/Interaction" node_paths=PackedStringArray("label", "timer")]
 transform = Transform3D(0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1, 0, 1.09, 0)
 script = ExtResource("7_2rewo")
 label = NodePath("Label3D")
 timer = NodePath("Timer")
 text = Array[String](["Test a", "Test the test b"])
 
-[node name="Label3D" type="Label3D" parent="Planet/PlanetRoot/Placeholder2/Character/Interaction/Dialogue"]
+[node name="Label3D" type="Label3D" parent="Planet/PlanetRoot/NPC/Character/Interaction/Dialogue"]
 text = "This is a test"
 font_size = 400
 
-[node name="Timer" type="Timer" parent="Planet/PlanetRoot/Placeholder2/Character/Interaction/Dialogue"]
+[node name="Timer" type="Timer" parent="Planet/PlanetRoot/NPC/Character/Interaction/Dialogue"]
 wait_time = 0.01
 
-[node name="Kill" type="Node" parent="Planet/PlanetRoot/Placeholder2" node_paths=PackedStringArray("timer", "mesh", "character")]
+[node name="Kill" type="Node" parent="Planet/PlanetRoot/NPC" node_paths=PackedStringArray("timer", "mesh", "character")]
 script = ExtResource("5_en4ie")
 timer = NodePath("Timer")
 mesh = NodePath("../Character")
@@ -107,7 +130,55 @@ character = NodePath("../Character")
 curve = SubResource("Curve_q8eno")
 killDis = 200.0
 
-[node name="Timer" type="Timer" parent="Planet/PlanetRoot/Placeholder2/Kill"]
+[node name="Timer" type="Timer" parent="Planet/PlanetRoot/NPC/Kill"]
+wait_time = 0.3
+one_shot = true
+
+[node name="Plant" type="Node3D" parent="Planet/PlanetRoot"]
+transform = Transform3D(0.997477, 0.0709926, 0, -0.0709926, 0.997477, 0, 0, 0, 1, 0, 0, 0)
+script = ExtResource("2_fr53q")
+speed = 0.01
+
+[node name="Sprite" type="MeshInstance3D" parent="Planet/PlanetRoot/Plant"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25.5, 0)
+material_override = SubResource("ShaderMaterial_fnycg")
+mesh = SubResource("QuadMesh_cfos3")
+script = ExtResource("1_s4rmy")
+
+[node name="Interactable" type="Area3D" parent="Planet/PlanetRoot/Plant/Sprite" node_paths=PackedStringArray("interactbale")]
+script = ExtResource("5_crgjx")
+interactbale = NodePath("CollisionShape3D/Logic")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Planet/PlanetRoot/Plant/Sprite/Interactable"]
+shape = SubResource("SphereShape3D_ugpis")
+
+[node name="Logic" type="Node3D" parent="Planet/PlanetRoot/Plant/Sprite/Interactable/CollisionShape3D" node_paths=PackedStringArray("player", "root", "renderer", "releaseTimer", "interactTimer")]
+script = ExtResource("8_eyrrm")
+player = NodePath("../../../../../../../Controller")
+root = NodePath("../../../..")
+renderer = NodePath("../../..")
+commonHeight = 25.5
+heldHeight = 26.4
+releaseTimer = NodePath("../ReleaseTimer")
+interactTimer = NodePath("../InteractTime")
+
+[node name="ReleaseTimer" type="Timer" parent="Planet/PlanetRoot/Plant/Sprite/Interactable/CollisionShape3D"]
+wait_time = 0.1
+one_shot = true
+
+[node name="InteractTime" type="Timer" parent="Planet/PlanetRoot/Plant/Sprite/Interactable/CollisionShape3D"]
+wait_time = 0.2
+one_shot = true
+
+[node name="Kill" type="Node" parent="Planet/PlanetRoot/Plant" node_paths=PackedStringArray("timer", "mesh", "character")]
+script = ExtResource("5_en4ie")
+timer = NodePath("Timer")
+mesh = NodePath("../Sprite")
+character = NodePath("../Sprite")
+curve = SubResource("Curve_c6avi")
+killDis = 200.0
+
+[node name="Timer" type="Timer" parent="Planet/PlanetRoot/Plant/Kill"]
 wait_time = 0.3
 one_shot = true
 
@@ -131,7 +202,8 @@ pitchRange = Vector2(-0.3, 0.1)
 rollRange = Vector2(-0.2, 0.15)
 
 [node name="Character" type="MeshInstance3D" parent="Controller" node_paths=PackedStringArray("cam")]
-transform = Transform3D(1, 0, 0, 0, 2, 0, 0, 0, 1, 0, 26, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25.5, 0)
+material_override = SubResource("StandardMaterial3D_qdvy4")
 mesh = SubResource("QuadMesh_354vw")
 skeleton = NodePath("../..")
 script = ExtResource("1_s4rmy")
@@ -261,9 +333,14 @@ offset_top = 907.0
 offset_right = 470.0
 offset_bottom = 980.0
 
-[connection signal="area_entered" from="Planet/PlanetRoot/Placeholder2/Character/Interaction" to="Planet/PlanetRoot/Placeholder2/Character/Interaction" method="Initiate"]
-[connection signal="area_exited" from="Planet/PlanetRoot/Placeholder2/Character/Interaction" to="Planet/PlanetRoot/Placeholder2/Character/Interaction" method="Leave"]
-[connection signal="timeout" from="Planet/PlanetRoot/Placeholder2/Character/Interaction/Dialogue/Timer" to="Planet/PlanetRoot/Placeholder2/Character/Interaction/Dialogue" method="NextChar"]
-[connection signal="timeout" from="Planet/PlanetRoot/Placeholder2/Kill/Timer" to="Planet/PlanetRoot/Placeholder2/Kill" method="Cleanup"]
+[connection signal="area_entered" from="Planet/PlanetRoot/NPC/Character/Interaction" to="Planet/PlanetRoot/NPC/Character/Interaction" method="Initiate"]
+[connection signal="area_exited" from="Planet/PlanetRoot/NPC/Character/Interaction" to="Planet/PlanetRoot/NPC/Character/Interaction" method="Leave"]
+[connection signal="timeout" from="Planet/PlanetRoot/NPC/Character/Interaction/Dialogue/Timer" to="Planet/PlanetRoot/NPC/Character/Interaction/Dialogue" method="NextChar"]
+[connection signal="timeout" from="Planet/PlanetRoot/NPC/Kill/Timer" to="Planet/PlanetRoot/NPC/Kill" method="Cleanup"]
+[connection signal="area_entered" from="Planet/PlanetRoot/Plant/Sprite/Interactable" to="Planet/PlanetRoot/Plant/Sprite/Interactable" method="Initiate"]
+[connection signal="area_exited" from="Planet/PlanetRoot/Plant/Sprite/Interactable" to="Planet/PlanetRoot/Plant/Sprite/Interactable" method="Leave"]
+[connection signal="timeout" from="Planet/PlanetRoot/Plant/Sprite/Interactable/CollisionShape3D/ReleaseTimer" to="Planet/PlanetRoot/Plant/Sprite/Interactable/CollisionShape3D/Logic" method="CanRelease"]
+[connection signal="timeout" from="Planet/PlanetRoot/Plant/Sprite/Interactable/CollisionShape3D/InteractTime" to="Planet/PlanetRoot/Plant/Sprite/Interactable/CollisionShape3D/Logic" method="CanInteract"]
+[connection signal="timeout" from="Planet/PlanetRoot/Plant/Kill/Timer" to="Planet/PlanetRoot/Plant/Kill" method="Cleanup"]
 [connection signal="timeout" from="Planet/Spawner/SpawnTimer" to="Planet/Spawner" method="SpawnEntity"]
 [connection signal="pressed" from="LogBook/FriendsRight/Button3" to="LogBook/FriendsRight" method="swapHover"]

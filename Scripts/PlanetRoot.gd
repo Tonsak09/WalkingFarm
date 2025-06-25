@@ -1,6 +1,7 @@
 extends Node3D
 
 @export var speed : float 
+var canMove = true
 
 func Init(target : Node3D):
 	$Character.cam = target
@@ -8,4 +9,5 @@ func Init(target : Node3D):
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
-	rotate_x(delta * speed)
+	if canMove:
+		rotate_x(delta * speed)
