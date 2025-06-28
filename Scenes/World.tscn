@@ -1,4 +1,4 @@
-[gd_scene load_steps=35 format=3 uid="uid://bx8amdklt1ww"]
+[gd_scene load_steps=39 format=3 uid="uid://bx8amdklt1ww"]
 
 [ext_resource type="Script" path="res://Scripts/Spawner.gd" id="1_cll8s"]
 [ext_resource type="Script" path="res://Scripts/CameraLock.gd" id="1_s4rmy"]
@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://ds7b5hyg7ssnu" path="res://Textures/Log Book/LogBook_Tasks-Left.PNG" id="11_lqgvb"]
 [ext_resource type="Texture2D" uid="uid://c0wksahyf0omi" path="res://Textures/farmJam_playerChar_V01.png" id="11_q1uqy"]
 [ext_resource type="Texture2D" uid="uid://ckpxxwuyd5sja" path="res://Textures/Log Book/LogBook_Friends-Right.PNG" id="12_l0qih"]
+[ext_resource type="Script" path="res://Scenes/DayNight.gd" id="12_wypq8"]
 [ext_resource type="Script" path="res://Scripts/Tab.gd" id="13_bev6f"]
 [ext_resource type="Texture2D" uid="uid://dylmh6qrar72k" path="res://Textures/Log Book/LogBook_Plants-Right.PNG" id="13_u5xah"]
 [ext_resource type="Texture2D" uid="uid://c00foh7iiveyj" path="res://Textures/Log Book/LogBook_Tasks-Right.PNG" id="14_ywc8u"]
@@ -73,6 +74,16 @@ height = 2.00055
 [sub_resource type="Environment" id="Environment_liblb"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_st1bh"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_t1y5a"]
+size = Vector3(5, 1, 5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y15or"]
+transparency = 1
+albedo_color = Color(0.900306, 0, 0.174097, 0.329412)
+
+[sub_resource type="BoxMesh" id="BoxMesh_qlc1d"]
+size = Vector3(5, 1, 5)
 
 [node name="World" type="Node3D"]
 
@@ -217,12 +228,13 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25, 0)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 shape = SubResource("CapsuleShape3D_x4i3g")
 
+[node name="OmniLight3D" type="OmniLight3D" parent="Controller"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25.7702, 0)
+light_color = Color(0.818219, 0.824683, 0.71087, 1)
+light_energy = 0.2
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_liblb")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.875566, 0.483099, 0, -0.483099, 0.875566, 0, 0, 0)
-shadow_enabled = true
 
 [node name="HouseTemp" type="MeshInstance3D" parent="."]
 transform = Transform3D(2.86891, 0, -0.877115, 0, 3, 0, 0.877115, 0, 2.86891, -3.685, 28.8496, 0)
@@ -332,6 +344,32 @@ offset_left = 251.0
 offset_top = 907.0
 offset_right = 470.0
 offset_bottom = 980.0
+
+[node name="DayNight" type="Node3D" parent="." node_paths=PackedStringArray("dirLight")]
+script = ExtResource("12_wypq8")
+rotateSpeed = 0.1
+dirLight = NodePath("Primary")
+dayColor = Color(0.959609, 0.901583, 0.850615, 1)
+nightColor = Color(0.245234, 0.420178, 0.606273, 1)
+
+[node name="Primary" type="DirectionalLight3D" parent="DayNight"]
+transform = Transform3D(1, 0, 0, 0, 0.875566, 0.483099, 0, -0.483099, 0.875566, 6.73082, 26.871, 0)
+shadow_enabled = true
+
+[node name="Secondary" type="DirectionalLight3D" parent="DayNight"]
+transform = Transform3D(-0.0347027, 0.632864, -0.773485, 0.746206, 0.531249, 0.401188, 0.66481, -0.563257, -0.490682, -8.99601, 26.871, -10.5088)
+light_color = Color(0.552956, 0.552956, 0.552956, 1)
+light_energy = 0.273
+
+[node name="StillZone" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8922, 25.2555, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StillZone"]
+shape = SubResource("BoxShape3D_t1y5a")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StillZone"]
+material_override = SubResource("StandardMaterial3D_y15or")
+mesh = SubResource("BoxMesh_qlc1d")
 
 [connection signal="area_entered" from="Planet/PlanetRoot/NPC/Character/Interaction" to="Planet/PlanetRoot/NPC/Character/Interaction" method="Initiate"]
 [connection signal="area_exited" from="Planet/PlanetRoot/NPC/Character/Interaction" to="Planet/PlanetRoot/NPC/Character/Interaction" method="Leave"]
