@@ -12,4 +12,5 @@ func _ready() -> void:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if initiated:
-		look_at(cam.global_position, global_position, true)
+		pass
+		#look_at(cam.global_position, global_position, true)
