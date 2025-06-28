@@ -6,6 +6,8 @@ extends Node3D
 @export var pitchRange : Vector2
 @export var rollRange  : Vector2
 
+@export var isInStillZone : bool 
+
 var pitch : float
 var roll : float
 
@@ -13,6 +15,7 @@ var roll : float
 func _ready() -> void:
 	pitch = 0
 	roll = 0
+	isInStillZone = false 
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

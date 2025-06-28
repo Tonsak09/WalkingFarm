@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://bx8amdklt1ww"]
+[gd_scene load_steps=40 format=3 uid="uid://bx8amdklt1ww"]
 
 [ext_resource type="Script" path="res://Scripts/Spawner.gd" id="1_cll8s"]
 [ext_resource type="Script" path="res://Scripts/CameraLock.gd" id="1_s4rmy"]
@@ -22,6 +22,7 @@
 [ext_resource type="Texture2D" uid="uid://c00foh7iiveyj" path="res://Textures/Log Book/LogBook_Tasks-Right.PNG" id="14_ywc8u"]
 [ext_resource type="Texture2D" uid="uid://bnpin7lfwgqct" path="res://Textures/Log Book/Next.PNG" id="15_ya2hs"]
 [ext_resource type="Texture2D" uid="uid://dg3xeuomdplxg" path="res://Textures/Log Book/Last.PNG" id="16_kivdd"]
+[ext_resource type="Script" path="res://Scenes/StillZone.gd" id="23_sbssv"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_rksr7"]
 radius = 25.0
@@ -223,6 +224,7 @@ initiated = true
 
 [node name="Area3D" type="Area3D" parent="Controller"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25, 0)
+collision_layer = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Controller/Area3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
@@ -363,6 +365,9 @@ light_energy = 0.273
 
 [node name="StillZone" type="Area3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.8922, 25.2555, 0)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("23_sbssv")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="StillZone"]
 shape = SubResource("BoxShape3D_t1y5a")
@@ -382,3 +387,5 @@ mesh = SubResource("BoxMesh_qlc1d")
 [connection signal="timeout" from="Planet/PlanetRoot/Plant/Kill/Timer" to="Planet/PlanetRoot/Plant/Kill" method="Cleanup"]
 [connection signal="timeout" from="Planet/Spawner/SpawnTimer" to="Planet/Spawner" method="SpawnEntity"]
 [connection signal="pressed" from="LogBook/FriendsRight/Button3" to="LogBook/FriendsRight" method="swapHover"]
+[connection signal="area_entered" from="StillZone" to="StillZone" method="EnterZone"]
+[connection signal="area_exited" from="StillZone" to="StillZone" method="LeaveZone"]

@@ -30,10 +30,10 @@ func _process(delta: float) -> void:
 			canInteract = false 
 			interactTimer.start()
 			held = false
-		
+			if !player.isInStillZone:
+				root.canMove = true
 	else:
 		renderer.position.y = commonHeight
-		root.canMove = true
 
 # When near the plant and activated 
 func Interact():
